@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\CN_WEB.Core\CN_WEB.Core.csproj" />
+    <ProjectReference Include="..\CN_WEB.Service\CN_WEB.Service.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,21 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using UserEntity = CN_WEB.Core.Model.User;
+using PostCommentEntity = CN_WEB.Core.Model.PostComment;
 
-namespace CN_WEB.Model.User
+namespace CN_WEB.Model.PostComment
 {
-    public class UserDto : BaseModel
+    public class PostCommentDto : BaseModel
     {
-        public UserDto(UserEntity entity) : base(entity)
+        public PostCommentDto(PostCommentEntity entity) : base(entity)
         {
         }
         public string Id { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
-        public string RefreshToken { get; set; }
+        public string UserId { get; set; }
+        public string PostId { get; set; }
+        public string Content { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
