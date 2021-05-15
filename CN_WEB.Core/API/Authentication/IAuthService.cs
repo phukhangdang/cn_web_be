@@ -7,6 +7,5 @@ namespace CN_WEB.Core.API.Authentication
     {
         bool ValidateToken(string idToken);
         UserModel GetUserFromIdToken(string idToken);
-        string RenewTokenId(string idToken);
     }
 }

@@ -262,7 +262,6 @@ namespace CN_WEB.Core.Model
                     .HasComment("Mật khẩu");
 
                 entity.Property(e => e.RefreshToken)
-                    .IsRequired()
                     .HasMaxLength(3000)
                     .IsUnicode(false)
                     .HasComment("Refresh token key để duy trì trạng thái đăng nhập của người dùng");

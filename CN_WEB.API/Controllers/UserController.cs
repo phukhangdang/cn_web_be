@@ -29,13 +29,13 @@ namespace CN_WEB.API.Controllers
 
         [Route("count")]
         [HttpGet]
-        public async Task<int> Count([FromQuery] UserRequestDto request)
+        public async Task<int> Count([FromQuery] UserRequestSelectDto request)
         {
             return await _userService.Count(request);
         }
 
         [HttpGet]
-        public async Task<IEnumerable<User>> Select([FromQuery] UserRequestDto request)
+        public async Task<IEnumerable<User>> Select([FromQuery] UserRequestSelectDto request)
         {
             return await _userService.Select(request);
         }
@@ -52,6 +52,20 @@ namespace CN_WEB.API.Controllers
         public async Task<bool> Delete([FromRoute] string id)
         {
             return await _userService.DeleteById(id);
+        }
+
+        [Route("create")]
+        [HttpPost]
+        public async Task<UserDto> Create([FromBody] UserRegisterDto requestDto)
+        {
+            return await _userService.Create(requestDto);
+        }
+
+        [HttpGet]
+        [Route("reset-pass/{id}")]
+        public async Task<bool> ResetPassDefault([FromRoute] string id)
+        {
+            return await _userService.ResetPassDefault(id);
         }
     }
 }

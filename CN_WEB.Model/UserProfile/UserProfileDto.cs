@@ -11,6 +11,9 @@ namespace CN_WEB.Model.UserProfile
         public UserProfileDto(UserProfileEntity entity) : base(entity)
         {
         }
+        public UserProfileDto()
+        {
+        }
         public string Id { get; set; }
         public string UserId { get; set; }
         public string FirstName { get; set; }

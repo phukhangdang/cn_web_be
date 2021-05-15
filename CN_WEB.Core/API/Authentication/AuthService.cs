@@ -16,40 +16,30 @@ namespace CN_WEB.Core.API.Authentication
         #region Private variables
 
         private readonly SysDbWriteContext _dbContext;
-        private readonly string _clientId, _clientSecret, _authority, _redirect, _discoverKey, _oauth;
-
+        private readonly IConfiguration _configuration;
 
         #endregion Private variables
 
-        public AuthService(IConfiguration configuration, SysDbWriteContext dbContext) : base()
+        public AuthService(SysDbWriteContext dbContext, IConfiguration configuration) : base()
         {
             _dbContext = dbContext;
-            _clientId = configuration["APIAuthentication:idaClientId"];
-            _clientSecret = configuration["APIAuthentication:idaClientSecret"];
-            _authority = configuration["APIAuthentication:idaAuthority"];
-            _redirect = configuration["APIAuthentication:idaRedirect"];
-            _discoverKey = configuration["APIAuthentication:idaADFSDiscoveryKey"];
-            _oauth = configuration["APIAuthentication:idaOauth"];
+            _configuration = configuration;
         }
 
         public bool ValidateToken(string idToken)
         {
             try
             {
-                // Get JSON web key
-                using WebClient wc = new WebClient();
-                string discoveryJson = wc.DownloadString(_discoverKey);
-                dynamic adfsJson = JsonConvert.DeserializeObject<dynamic>(discoveryJson);
-                JsonWebKey jsonWebKey = new JsonWebKey(adfsJson["keys"]?[0]?.ToString());
-
                 // Read token for getting user details
+                var jwtAppSettingOptions = _configuration.GetSection("JwtIssuerOptions");
                 var validationParameters = new TokenValidationParameters()
                 {
-                    ValidateAudience = false,
-                    ValidIssuer = _authority,
+                    ValidateAudience = true,
                     ValidateIssuer = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = jsonWebKey,
+                    ValidIssuer = "http://localhost:44353",
+                    ValidAudience = "http://localhost:44353",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtAppSettingOptions["JwtKey"]))
                 };
 
                 // Validate token
@@ -69,48 +59,14 @@ namespace CN_WEB.Core.API.Authentication
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var idTokenInfo = tokenHandler.ReadToken(idToken) as JwtSecurityToken;
-                string upn = idTokenInfo.Claims.Where(c => c.Type == "upn").Select(c => c.Value).FirstOrDefault();
-                return _dbContext.User.Where(x => x.Email == upn).SingleOrDefault();
+                string upn = idTokenInfo.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault();
+                return _dbContext.User.Where(x => x.Id == upn).SingleOrDefault();
             }
             catch
             {
                 return null;
             }
 
-        }
-
-        public string RenewTokenId(string idToken)
-        {
-            string result = string.Empty;
-            try
-            {
-                // Get new token
-                UserModel user = GetUserFromIdToken(idToken);
-                if (user == null)
-                {
-                    return result;
-                }
-                NameValueCollection parameters = new NameValueCollection
-                {
-                    { "client_id", _clientId },
-                    { "client_secret", _clientSecret },
-                    { "redirect_uri", _redirect },
-                    { "refresh_token", user.RefreshToken },
-                    { "scope", "openid" },
-                    { "grant_type", "refresh_token" }
-                };
-
-                using WebClient wc = new WebClient();
-                string json = Encoding.UTF8.GetString(wc.UploadValues(_oauth, parameters));
-                dynamic obj = JsonConvert.DeserializeObject<dynamic>(json);
-                result = obj["id_token"];
-            }
-            catch
-            {
-                result = string.Empty;
-            }
-
-            return result;
         }
     }
 }

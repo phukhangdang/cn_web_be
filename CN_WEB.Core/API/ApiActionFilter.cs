@@ -53,17 +53,8 @@ namespace CN_WEB.Core.API
             }
             else
             {
-                string newTokenId = _authService.RenewTokenId(idToken);
-                if (_authService.ValidateToken(newTokenId))
-                {
-                    var userModel = _authService.GetUserFromIdToken(idToken);
-                    httpContext.User = new MyClaimsPrincipal(userModel);
-                }
-                else
-                {
-                    ClearTokenId(httpContext);
-                    throw new UnauthorizedException();
-                }
+                ClearTokenId(httpContext);
+                throw new UnauthorizedException();
             }
         }
 
