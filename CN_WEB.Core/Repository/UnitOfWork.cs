@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Vietlott.AMS.Core.Repository
+namespace CN_WEB.Core.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
