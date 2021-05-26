@@ -35,7 +35,7 @@ namespace CN_WEB.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<PostComment>> Select([FromQuery] PostCommentRequestDto request)
+        public async Task<IEnumerable<PostCommentDto>> Select([FromQuery] PostCommentRequestDto request)
         {
             return await _postCommentService.Select(request);
         }

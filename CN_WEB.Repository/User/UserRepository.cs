@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserEntity = CN_WEB.Core.Model.User;
+using FollowerEntity = CN_WEB.Core.Model.Follower;
+using FollowedEntity = CN_WEB.Core.Model.Followed;
+using PostEntity = CN_WEB.Core.Model.Post;
 
 namespace CN_WEB.Repository.User
 {
@@ -41,14 +44,28 @@ namespace CN_WEB.Repository.User
             return await Task.FromResult(result);
         }
 
-        public async Task<IEnumerable<UserEntity>> Select(UserRequestSelectDto request)
+        public async Task<IEnumerable<UserDto>> Select(UserRequestSelectDto request)
         {
             IQueryable<UserEntity> query = _unitOfWork.Select<UserEntity>().AsNoTracking();
             query = Filter(query, request).OrderBy(x => x.Id);
             query = query.Paging(request);
-            var dataResult = query.ToList()
-                .Select(a => { a.Password = string.Empty; a.RefreshToken = string.Empty; return a; })
-                .ToList();
+            var dataResult = query.Select(x => new UserDto(x)).ToList();
+
+            var follower = _unitOfWork.Select<FollowerEntity>();
+            var followed = _unitOfWork.Select<FollowedEntity>();
+            var post = _unitOfWork.Select<PostEntity>();
+            var userId = _unitOfWork.GetCurrentUserId();
+
+            foreach (var result in dataResult)
+            {
+                if (follower.Where(x => x.UserId == result.Id).Where(x => x.FollowerId == userId).ToList().Count() > 0) { result.IsFollowed = true; }
+                else { result.IsFollowed = false; }
+                result.FollowerCount = follower.Where(x => x.UserId == result.Id).Count();
+                result.FollowedCount = followed.Where(x => x.UserId == result.Id).Count();
+                result.PostCount = post.Where(x => x.UserId == result.Id).Count();
+            }
+            dataResult = dataResult.OrderByDescending(x => x.FollowerCount).ThenByDescending(x => x.CreatedAt).ToList();
+
             return await Task.FromResult(dataResult);
         }
 
@@ -108,6 +125,11 @@ namespace CN_WEB.Repository.User
             if (!string.IsNullOrEmpty(searchEntity.Id))
             {
                 models = models.Where(x => x.Id == searchEntity.Id);
+            }
+
+            if (!string.IsNullOrEmpty(searchEntity.UserName))
+            {
+                models = models.Where(x => x.UserName.Contains(searchEntity.UserName));
             }
 
             return models;

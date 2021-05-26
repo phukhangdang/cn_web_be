@@ -33,6 +33,7 @@ namespace CN_WEB.Repository.PostLike
 
         public async Task<PostLikeDto> Merge(PostLikeDto model)
         {
+            model.UserId = _unitOfWork.GetCurrentUserId();
             var result = _unitOfWork.Merge<PostLikeEntity, PostLikeDto>(model);
             return await Task.FromResult(result);
         }
@@ -70,6 +71,11 @@ namespace CN_WEB.Repository.PostLike
             if (!string.IsNullOrEmpty(searchEntity.Id))
             {
                 models = models.Where(x => x.Id == searchEntity.Id);
+            }
+
+            if (!string.IsNullOrEmpty(searchEntity.PostId))
+            {
+                models = models.Where(x => x.PostId == searchEntity.PostId);
             }
 
             return models;

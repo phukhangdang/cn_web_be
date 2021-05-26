@@ -12,7 +12,7 @@ namespace CN_WEB.Repository.User
     public interface IUserRepository : IScoped
     {
         Task<UserDto> SelectById(string id);
-        Task<IEnumerable<UserEntity>> Select(UserRequestSelectDto request);
+        Task<IEnumerable<UserDto>> Select(UserRequestSelectDto request);
         Task<int> Count(UserRequestSelectDto request);
         Task<UserDto> Merge(UserDto model);
         Task<bool> DeleteById(string id);

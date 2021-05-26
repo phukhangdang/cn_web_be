@@ -8,5 +8,6 @@ namespace CN_WEB.Model.PostComment
     public class PostCommentRequestDto : BaseRequestDto
     {
         public string Id { get; set; }
+        public string PostId { get; set; }
     }
 }

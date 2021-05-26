@@ -14,10 +14,12 @@ namespace CN_WEB.Model.User
         public string Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public string Role { get; set; }
-        public string RefreshToken { get; set; }
         public int Status { get; set; }
+        public int PostCount { get; set; }
+        public int FollowerCount { get; set; }
+        public int FollowedCount { get; set; }
+        public bool IsFollowed { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public string ModifiedBy { get; set; }

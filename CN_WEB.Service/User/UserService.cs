@@ -36,7 +36,7 @@ namespace CN_WEB.Service.User
             return await _userRepository.Count(request);
         }
 
-        public async Task<IEnumerable<UserEntity>> Select(UserRequestSelectDto request)
+        public async Task<IEnumerable<UserDto>> Select(UserRequestSelectDto request)
         {
             return await _userRepository.Select(request);
         }

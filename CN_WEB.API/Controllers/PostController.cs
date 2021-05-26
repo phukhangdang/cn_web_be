@@ -35,7 +35,7 @@ namespace CN_WEB.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Post>> Select([FromQuery] PostRequestDto request)
+        public async Task<IEnumerable<PostDto>> Select([FromQuery] PostRequestDto request)
         {
             return await _postService.Select(request);
         }

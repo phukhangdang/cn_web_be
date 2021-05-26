@@ -31,7 +31,7 @@ namespace CN_WEB.Service.PostComment
             return await _postCommentRepository.Count(request);
         }
 
-        public async Task<IQueryable<PostCommentEntity>> Select(PostCommentRequestDto request)
+        public async Task<IEnumerable<PostCommentDto>> Select(PostCommentRequestDto request)
         {
             return await _postCommentRepository.Select(request);
         }

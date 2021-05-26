@@ -34,7 +34,7 @@ namespace CN_WEB.Service.Account
     public interface IAccountService : IScoped
     {
         Task<AccountDto> Authenticate(HttpContext httpContext, AccountRequestDto request);
-        Task<AccountChildDto> LoginChild(LoginRequestDto request);
+        Task<AccountChildDto> Login(LoginRequestDto request);
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ namespace CN_WEB.Service.Account
             return await Task.FromResult(result);
         }
 
-        public async Task<AccountChildDto> LoginChild(LoginRequestDto request)
+        public async Task<AccountChildDto> Login(LoginRequestDto request)
         {
             var userInfo = new UserModel();
             if (!string.IsNullOrEmpty(request.UserName))
