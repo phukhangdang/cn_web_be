@@ -8,5 +8,6 @@ namespace CN_WEB.Model.Post
     public class PostRequestDto : BaseRequestDto
     {
         public string Id { get; set; }
+        public string UserId { get; set; }
     }
 }

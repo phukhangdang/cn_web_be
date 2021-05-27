@@ -2,21 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PostCommentEntity = CN_WEB.Core.Model.PostComment;
+using NotificationEntity = CN_WEB.Core.Model.Notification;
 
-namespace CN_WEB.Model.PostComment
+namespace CN_WEB.Model.Notification
 {
-    public class PostCommentDto : BaseModel
+    public class NotificationDto : BaseModel
     {
-        public PostCommentDto(PostCommentEntity entity) : base(entity)
+        public NotificationDto(NotificationEntity entity) : base(entity)
         {
         }
         public string Id { get; set; }
-        public string UserId { get; set; }
-        public string UserName { get; set; }
+        public string UserSendId { get; set; }
+        public string UserSendName { get; set; }
+        public string UserReceive { get; set; }
         public string PostId { get; set; }
-        public string Content { get; set; }
-        public int Status { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public string ModifiedBy { get; set; }

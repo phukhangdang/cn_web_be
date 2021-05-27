@@ -12,9 +12,9 @@ namespace CN_WEB.Repository.PostComment
     public interface IPostCommentRepository : IScoped
     {
         Task<PostCommentDto> SelectById(string id);
-        Task<IQueryable<PostCommentEntity>> Select(PostCommentRequestDto request);
+        Task<IEnumerable<PostCommentDto>> Select(PostCommentRequestDto request);
         Task<int> Count(PostCommentRequestDto request);
-        Task<PostCommentDto> Merge(PostCommentDto model);
+        Task<PostCommentEntity> Merge(PostCommentDto model);
         Task<bool> DeleteById(string id);
     }
 }

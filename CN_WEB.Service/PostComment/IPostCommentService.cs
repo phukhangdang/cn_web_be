@@ -12,7 +12,7 @@ namespace CN_WEB.Service.PostComment
     public interface IPostCommentService : IScoped
     {
         Task<PostCommentDto> SelectByID(string id);
-        Task<IQueryable<PostCommentEntity>> Select(PostCommentRequestDto request);
+        Task<IEnumerable<PostCommentDto>> Select(PostCommentRequestDto request);
         Task<int> Count(PostCommentRequestDto request);
         Task<PostCommentDto> Merge(PostCommentDto dto);
         Task<bool> DeleteById(string id);

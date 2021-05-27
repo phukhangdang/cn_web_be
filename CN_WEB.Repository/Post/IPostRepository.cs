@@ -12,7 +12,7 @@ namespace CN_WEB.Repository.Post
     public interface IPostRepository : IScoped
     {
         Task<PostDto> SelectById(string id);
-        Task<IQueryable<PostEntity>> Select(PostRequestDto request);
+        Task<IEnumerable<PostDto>> Select(PostRequestDto request);
         Task<int> Count(PostRequestDto request);
         Task<PostDto> Merge(PostDto model);
         Task<bool> DeleteById(string id);

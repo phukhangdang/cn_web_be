@@ -8,5 +8,6 @@ namespace CN_WEB.Model.PostLike
     public class PostLikeRequestDto : BaseRequestDto
     {
         public string Id { get; set; }
+        public string PostId { get; set; }
     }
 }

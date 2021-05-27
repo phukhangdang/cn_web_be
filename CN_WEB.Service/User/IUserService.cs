@@ -12,7 +12,7 @@ namespace CN_WEB.Service.User
     public interface IUserService : IScoped
     {
         Task<UserDto> SelectByID(string id);
-        Task<IEnumerable<UserEntity>> Select(UserRequestSelectDto request);
+        Task<IEnumerable<UserDto>> Select(UserRequestSelectDto request);
         Task<int> Count(UserRequestSelectDto request);
         Task<UserDto> Merge(UserDto dto);
         Task<bool> DeleteById(string id);

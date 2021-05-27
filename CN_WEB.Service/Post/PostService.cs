@@ -31,7 +31,7 @@ namespace CN_WEB.Service.Post
             return await _postRepository.Count(request);
         }
 
-        public async Task<IQueryable<PostEntity>> Select(PostRequestDto request)
+        public async Task<IEnumerable<PostDto>> Select(PostRequestDto request)
         {
             return await _postRepository.Select(request);
         }

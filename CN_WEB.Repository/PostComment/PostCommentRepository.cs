@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PostCommentEntity = CN_WEB.Core.Model.PostComment;
+using UserEntity = CN_WEB.Core.Model.User;
 
 namespace CN_WEB.Repository.PostComment
 {
@@ -31,18 +32,31 @@ namespace CN_WEB.Repository.PostComment
             return await query.CountAsync();
         }
 
-        public async Task<PostCommentDto> Merge(PostCommentDto model)
+        public async Task<PostCommentEntity> Merge(PostCommentDto model)
         {
+            model.UserId = _unitOfWork.GetCurrentUserId();
             var result = _unitOfWork.Merge<PostCommentEntity, PostCommentDto>(model);
-            return await Task.FromResult(result);
+            return await Task.FromResult(_unitOfWork.Find<PostCommentEntity>(result.Id));
         }
 
-        public async Task<IQueryable<PostCommentEntity>> Select(PostCommentRequestDto request)
+        public async Task<IEnumerable<PostCommentDto>> Select(PostCommentRequestDto request)
         {
             IQueryable<PostCommentEntity> query = _unitOfWork.Select<PostCommentEntity>().AsNoTracking();
             query = Filter(query, request).OrderBy(x => x.Id);
             query = query.Paging(request);
-            return await Task.FromResult(query);
+
+            var results = query.Select(x => new PostCommentDto(x)).ToList();
+
+            var user = _unitOfWork.Select<UserEntity>().AsNoTracking();
+            foreach (var result in results)
+            {
+                if (result.UserId != null)
+                {
+                    var userId = user.Where(c => c.Id == result.UserId).FirstOrDefault();
+                    if (userId != null) { result.UserName = userId.UserName; }
+                }
+            }
+            return await Task.FromResult(results);
         }
 
         public async Task<PostCommentDto> SelectById(string id)
@@ -70,6 +84,11 @@ namespace CN_WEB.Repository.PostComment
             if (!string.IsNullOrEmpty(searchEntity.Id))
             {
                 models = models.Where(x => x.Id == searchEntity.Id);
+            }
+
+            if (!string.IsNullOrEmpty(searchEntity.PostId))
+            {
+                models = models.Where(x => x.PostId == searchEntity.PostId);
             }
 
             return models;

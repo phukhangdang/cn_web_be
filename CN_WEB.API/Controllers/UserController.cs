@@ -35,7 +35,7 @@ namespace CN_WEB.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<User>> Select([FromQuery] UserRequestSelectDto request)
+        public async Task<IEnumerable<UserDto>> Select([FromQuery] UserRequestSelectDto request)
         {
             return await _userService.Select(request);
         }

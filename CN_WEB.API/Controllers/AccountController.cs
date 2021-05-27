@@ -25,12 +25,12 @@ namespace CN_WEB.API.Controllers
             _accountService = accountService;
         }
 
-        [Route("login-child")]
+        [Route("login")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<AccountChildDto> LoginChild([FromBody] LoginRequestDto request)
+        public async Task<AccountChildDto> Login([FromBody] LoginRequestDto request)
         {
-            return await _accountService.LoginChild(request);
+            return await _accountService.Login(request);
         }
 
         [Route("logout")]

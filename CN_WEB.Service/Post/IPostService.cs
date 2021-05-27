@@ -12,7 +12,7 @@ namespace CN_WEB.Service.Post
     public interface IPostService : IScoped
     {
         Task<PostDto> SelectByID(string id);
-        Task<IQueryable<PostEntity>> Select(PostRequestDto request);
+        Task<IEnumerable<PostDto>> Select(PostRequestDto request);
         Task<int> Count(PostRequestDto request);
         Task<PostDto> Merge(PostDto dto);
         Task<bool> DeleteById(string id);

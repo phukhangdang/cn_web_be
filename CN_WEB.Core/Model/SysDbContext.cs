@@ -18,6 +18,7 @@ namespace CN_WEB.Core.Model
         public virtual DbSet<Followed> Followed { get; set; }
         public virtual DbSet<Follower> Follower { get; set; }
         public virtual DbSet<Message> Message { get; set; }
+        public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<PostComment> PostComment { get; set; }
         public virtual DbSet<PostLike> PostLike { get; set; }
@@ -114,6 +115,41 @@ namespace CN_WEB.Core.Model
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(32)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UserReceive)
+                    .IsRequired()
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasComment("Id của người nhận");
+
+                entity.Property(e => e.UserSendId)
+                    .IsRequired()
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasComment("Id của người gửi");
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("notification");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PostId)
+                    .IsRequired()
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasComment("Bài viết");
 
                 entity.Property(e => e.UserReceive)
                     .IsRequired()
