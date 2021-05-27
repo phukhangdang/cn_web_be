@@ -1,6 +1,7 @@
 using CN_WEB.Core.API;
 using CN_WEB.Core.Model;
 using CN_WEB.Core.Service;
+using CN_WEB.Service.SignalRHub;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -87,6 +88,9 @@ namespace CN_WEB.API
                        .AllowAnyHeader();
             }));
 
+            // Add hub
+            services.AddSignalR();
+
             //// ===== Add Jwt Authentication ========
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default Claims
                                                                         // get options
@@ -109,6 +113,21 @@ namespace CN_WEB.API
                         ValidAudience = jwtIssuer,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                    cfg.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/signalR"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
@@ -163,6 +182,7 @@ namespace CN_WEB.API
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<SignalRHubService>("/signalR");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");

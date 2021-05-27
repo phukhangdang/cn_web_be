@@ -11,6 +11,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserEntity = CN_WEB.Core.Model.User;
+using FollowerEntity = CN_WEB.Core.Model.Follower;
+using FollowedEntity = CN_WEB.Core.Model.Followed;
+using Microsoft.EntityFrameworkCore;
+using CN_WEB.Core.API;
 
 namespace CN_WEB.Service.User
 {
@@ -61,6 +65,17 @@ namespace CN_WEB.Service.User
             // Begin transaction
             using var transaction = _unitOfWork.BeginTransaction();
 
+            // Check trung user
+            var allUser = _unitOfWork.Select<UserEntity>().AsNoTracking();
+            if (allUser.Where(x => x.UserName == user.UserName).Count() > 0)
+            {
+                throw new BadRequestException("User has been already in D2B2LM!");
+            }
+            else if (allUser.Where(x => x.Email == user.Email).Count() > 0)
+            {
+                throw new BadRequestException("User has been already in D2B2LM!");
+            }
+
             // Merge user
             var userInfo = new UserEntity { Id = Guid.NewGuid().ToString("N") };
             userInfo.UserName = user.UserName;
@@ -77,6 +92,16 @@ namespace CN_WEB.Service.User
             userProfileInfo.LastName = user.LastName;
             userProfileInfo.PhoneNumber = user.PhoneNumber;
             await _userProfileRepository.Merge(userProfileInfo);
+
+            // Merge follow
+            var follower = new FollowerEntity();
+            follower.UserId = userInfo.Id;
+            follower.FollowerId = userInfo.Id;
+            var followed = new FollowedEntity();
+            followed.UserId = userInfo.Id;
+            followed.FollowedId = userInfo.Id;
+            _unitOfWork.Merge(follower);
+            _unitOfWork.Merge(followed);
 
             // Commit transaction
             transaction.Commit();

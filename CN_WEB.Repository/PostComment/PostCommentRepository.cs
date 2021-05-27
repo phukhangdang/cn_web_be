@@ -32,11 +32,11 @@ namespace CN_WEB.Repository.PostComment
             return await query.CountAsync();
         }
 
-        public async Task<PostCommentDto> Merge(PostCommentDto model)
+        public async Task<PostCommentEntity> Merge(PostCommentDto model)
         {
             model.UserId = _unitOfWork.GetCurrentUserId();
             var result = _unitOfWork.Merge<PostCommentEntity, PostCommentDto>(model);
-            return await Task.FromResult(result);
+            return await Task.FromResult(_unitOfWork.Find<PostCommentEntity>(result.Id));
         }
 
         public async Task<IEnumerable<PostCommentDto>> Select(PostCommentRequestDto request)

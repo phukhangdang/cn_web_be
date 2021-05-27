@@ -10,6 +10,7 @@ using UserEntity = CN_WEB.Core.Model.User;
 using PostEntity = CN_WEB.Core.Model.Post;
 using PostCommentEntity = CN_WEB.Core.Model.PostComment;
 using PostLikeEntity = CN_WEB.Core.Model.PostLike;
+using FollowedEntity = CN_WEB.Core.Model.Followed;
 using CN_WEB.Repository.PostComment;
 using CN_WEB.Repository.PostLike;
 using CN_WEB.Model.PostComment;
@@ -55,13 +56,23 @@ namespace CN_WEB.Repository.Post
             query = Filter(query, request).OrderByDescending(x => x.CreatedAt);
             query = query.Paging(request);
             var user = _unitOfWork.Select<UserEntity>().AsNoTracking();
+            var currentUserId = _unitOfWork.GetCurrentUserId();
 
-            var results = query.Select(x => new PostDto(x)).ToList();
+            var postQuery = query.Select(x => new PostDto(x)).ToList();
 
             IQueryable<PostCommentEntity> commentQuery = _unitOfWork.Select<PostCommentEntity>().AsNoTracking();
             IQueryable<PostLikeEntity> likeQuery = _unitOfWork.Select<PostLikeEntity>().AsNoTracking();
-
+            var followedQuery = _unitOfWork.Select<FollowedEntity>().AsNoTracking().Where(x => x.UserId == currentUserId).ToList();
             var commentDto = commentQuery.OrderBy(x => x.CreatedAt).Select(x => new PostCommentDto(x)).ToList();
+
+            var results = new List<PostDto>();
+            foreach (var followed in followedQuery)
+            {
+                foreach (var post in postQuery)
+                {
+                    if (post.UserId == followed.FollowedId) { results.Add(post); }
+                }
+            }
 
             foreach (var comment in commentDto)
             {
@@ -89,9 +100,8 @@ namespace CN_WEB.Repository.Post
                 if (temp2.Where(c => c.UserId == _unitOfWork.GetCurrentUserId()).Count() > 0) { result.Liked = true; }
                 else { result.Liked = false; }
                 result.CountLike = temp2.Count();
-                
             }
-
+            results = results.OrderByDescending(x => x.CreatedAt).ToList();
             return await Task.FromResult(results);
         }
 

@@ -14,7 +14,7 @@ namespace CN_WEB.Repository.PostComment
         Task<PostCommentDto> SelectById(string id);
         Task<IEnumerable<PostCommentDto>> Select(PostCommentRequestDto request);
         Task<int> Count(PostCommentRequestDto request);
-        Task<PostCommentDto> Merge(PostCommentDto model);
+        Task<PostCommentEntity> Merge(PostCommentDto model);
         Task<bool> DeleteById(string id);
     }
 }
