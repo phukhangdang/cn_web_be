@@ -1,6 +1,7 @@
 ﻿using CN_WEB.Core.Model;
 using CN_WEB.Model.Post;
 using CN_WEB.Service.Post;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace CN_WEB.API.Controllers
 {
     [Route("post")]
+    [Authorize]
     public class PostController : Controller
     {
         private readonly IPostService _postService;

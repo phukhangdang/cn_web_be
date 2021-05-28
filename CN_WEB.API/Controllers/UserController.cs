@@ -1,6 +1,7 @@
 ﻿using CN_WEB.Core.Model;
 using CN_WEB.Model.User;
 using CN_WEB.Service.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace CN_WEB.API.Controllers
 {
     [Route("user")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -54,6 +56,7 @@ namespace CN_WEB.API.Controllers
             return await _userService.DeleteById(id);
         }
 
+        [AllowAnonymous]
         [Route("create")]
         [HttpPost]
         public async Task<UserDto> Create([FromBody] UserRegisterDto requestDto)

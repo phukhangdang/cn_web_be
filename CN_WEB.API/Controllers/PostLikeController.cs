@@ -1,6 +1,7 @@
 ﻿using CN_WEB.Core.Model;
 using CN_WEB.Model.PostLike;
 using CN_WEB.Service.PostLike;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace CN_WEB.API.Controllers
 {
     [Route("post-like")]
+    [Authorize]
     public class PostLikeController : Controller
     {
         private readonly IPostLikeService _postLikeService;

@@ -1,6 +1,7 @@
 ﻿using CN_WEB.Core.Model;
 using CN_WEB.Model.PostComment;
 using CN_WEB.Service.PostComment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace CN_WEB.API.Controllers
 {
     [Route("post-comment")]
+    [Authorize]
     public class PostCommentController : Controller
     {
         private readonly IPostCommentService _postCommentService;
