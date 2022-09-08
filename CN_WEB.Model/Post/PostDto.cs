@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PostEntity = CN_WEB.Core.Model.Post;
+using FileEntity = CN_WEB.Core.Model.File;
 
 namespace CN_WEB.Model.Post
 {
@@ -14,6 +15,7 @@ namespace CN_WEB.Model.Post
         }
         public string Id { get; set; }
         public string UserId { get; set; }
+        public string FileId { get; set; }
         public string UserName { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
@@ -25,5 +27,6 @@ namespace CN_WEB.Model.Post
         public DateTime? CreatedAt { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
+        public FileEntity File { get; set; }
     }
 }

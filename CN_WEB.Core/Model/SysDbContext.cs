@@ -15,6 +15,7 @@ namespace CN_WEB.Core.Model
         {
         }
 
+        public virtual DbSet<File> File { get; set; }
         public virtual DbSet<Followed> Followed { get; set; }
         public virtual DbSet<Follower> Follower { get; set; }
         public virtual DbSet<Message> Message { get; set; }
@@ -36,6 +37,43 @@ namespace CN_WEB.Core.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<File>(entity =>
+            {
+                entity.ToTable("file");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Extension)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LocationPath)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Module)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Note)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Followed>(entity =>
             {
                 entity.ToTable("followed");
@@ -182,6 +220,10 @@ namespace CN_WEB.Core.Model
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
+                entity.Property(e => e.FileId)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(32)
                     .IsUnicode(false);
@@ -216,6 +258,10 @@ namespace CN_WEB.Core.Model
                     .HasComment("Nội dung của bài đăng");
 
                 entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FileId)
                     .HasMaxLength(32)
                     .IsUnicode(false);
 

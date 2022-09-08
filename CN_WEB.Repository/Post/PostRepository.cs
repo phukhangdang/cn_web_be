@@ -11,6 +11,7 @@ using PostEntity = CN_WEB.Core.Model.Post;
 using PostCommentEntity = CN_WEB.Core.Model.PostComment;
 using PostLikeEntity = CN_WEB.Core.Model.PostLike;
 using FollowedEntity = CN_WEB.Core.Model.Followed;
+using FileEntity = CN_WEB.Core.Model.File;
 using CN_WEB.Repository.PostComment;
 using CN_WEB.Repository.PostLike;
 using CN_WEB.Model.PostComment;
@@ -62,19 +63,24 @@ namespace CN_WEB.Repository.Post
 
             IQueryable<PostCommentEntity> commentQuery = _unitOfWork.Select<PostCommentEntity>().AsNoTracking();
             IQueryable<PostLikeEntity> likeQuery = _unitOfWork.Select<PostLikeEntity>().AsNoTracking();
-            var followedQuery = _unitOfWork.Select<FollowedEntity>().AsNoTracking().Where(x => x.UserId == currentUserId).ToList();
-            var commentDto = commentQuery.OrderBy(x => x.CreatedAt).Select(x => new PostCommentDto(x)).ToList();
+            IQueryable<FileEntity> fileQuery = _unitOfWork.Select<FileEntity>().AsNoTracking();
+            var listFollowed = _unitOfWork.Select<FollowedEntity>().AsNoTracking().Where(x => x.UserId == currentUserId).ToList();
+            var listComment = commentQuery.OrderBy(x => x.CreatedAt).Select(x => new PostCommentDto(x)).ToList();
 
             var results = new List<PostDto>();
-            foreach (var followed in followedQuery)
+            foreach (var followed in listFollowed)
             {
                 foreach (var post in postQuery)
                 {
-                    if (post.UserId == followed.FollowedId) { results.Add(post); }
+                    if (post.UserId == followed.FollowedId)
+                    {
+                        post.File = fileQuery.Where(x => x.Id == post.FileId).FirstOrDefault();
+                        results.Add(post);
+                    }
                 }
             }
 
-            foreach (var comment in commentDto)
+            foreach (var comment in listComment)
             {
                 if (comment.UserId != null)
                 {
@@ -90,7 +96,7 @@ namespace CN_WEB.Repository.Post
                     var userId = user.Where(c => c.Id == result.UserId).FirstOrDefault();
                     if (userId != null) { result.UserName = userId.UserName; }
                 }
-                var temp = commentDto.Where(c => c.PostId == result.Id).ToList();
+                var temp = listComment.Where(c => c.PostId == result.Id).ToList();
                 if (temp.Count() > 0)
                 {
                     result.Comments = new List<PostCommentDto>();

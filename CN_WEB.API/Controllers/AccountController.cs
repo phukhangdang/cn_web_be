@@ -12,7 +12,6 @@ using AccountDto = CN_WEB.Model.Account.Account;
 
 namespace CN_WEB.API.Controllers
 {
-    // test git
     [Route("account")]
     public class AccountController : Controller
     {
