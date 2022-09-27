@@ -66,3 +66,14 @@ namespace CN_WEB.Service.PostComment
         }
     }
 }
+
+/*
+Dyson là thương hiệu đồ gia dụng đến từ Mỹ
+và từ lâu được ví von như Apple của giới gia dụng
+vì chất lượng cũng như sự tinh xảo trong từng đường
+nét thiết kế. Trước đây tôi từng được dịp trải nghiệm
+chiếc V12 Detect Slim và thấy rất hài lòng với những
+gì mà chiếc máy hút bụi ấy mang lại,
+giờ đây V15 Detect lại tiếp tục thừa hưởng
+và đem đến nhiều cải tiến cũng như đa dạng mục đích sử dụng hơn. 
+*/
