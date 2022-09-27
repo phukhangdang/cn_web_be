@@ -15,6 +15,7 @@ namespace CN_WEB.Model.PostComment
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string PostId { get; set; }
+        public string FileId { get; set; }
         public string Content { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
