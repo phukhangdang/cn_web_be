@@ -58,7 +58,4 @@ Cách đóng gói của sản phẩm này cũng
 không mấy lạ lẫm nữa vì tôi đã từng gặp
 ở phiên bản V12: sắp xếp rất gọn gàng trong
 chiếc hộp hình chữ nhật, hay thậm chí có thể
-nói là đội ngũ Dyson đã đóng gói rất tài
-tình đến nỗi khi tôi lấy tất cả những đầu
-hút ra hết thì không tài nào đặt vào vừa vặn được nữa.
- */
+*/
